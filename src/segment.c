@@ -35,7 +35,7 @@ void segment_countdown(int num) {
         sleep(1);
     }
 
-    buzzer_on();
+    buzzer_on(1);
     sleep(1);
     buzzer_off();
 }

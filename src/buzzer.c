@@ -2,13 +2,26 @@
 #include <softTone.h>
 #include <pthread.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include "device_control.h"
 
 #define SPKR BUZZER_PIN
+#define MAX_QUEUE 10
 
-static pthread_t music_thread;
-static volatile bool playing = false;    // volatile: 최적화 방지
+typedef struct {
+    int song_id;
+} SongRequest;
+
+static SongRequest song_queue[MAX_QUEUE];
+static int queue_front = 0;
+static int queue_rear = 0;
+
+static pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t queue_not_empty = PTHREAD_COND_INITIALIZER;
+
+static volatile bool playing = false;
 static volatile bool stop_signal = false;
+static bool stop_all = false;
 
 int notes[] = {
     660, 660, 0, 660, 0, 510, 660, 0,
@@ -45,56 +58,88 @@ int durations[] = {
 };
 
 int notes2[] = {
-    659, 659, 784, 784, 880, 880, 784, 0,
-    698, 698, 659, 659, 587, 587, 523, 0,
-
-    784, 784, 698, 698, 659, 659, 587, 0,
-    784, 784, 698, 698, 659, 659, 587, 0,
-
-    659, 784, 880, 784, 659, 523, 587, 659,
-    523, 659, 784, 659, 523, 0
+    262, 262, 294, 262, 349, 330,
+    262, 262, 294, 262, 392, 349,
+    262, 262, 523, 440, 349, 330, 294,
+    466, 466, 440, 349, 392, 349
 };
 
 int durations2[] = {
-    300, 300, 300, 300, 300, 300, 600, 200,
-    300, 300, 300, 300, 300, 300, 600, 200,
-
-    300, 300, 300, 300, 300, 300, 600, 200,
-    300, 300, 300, 300, 300, 300, 600, 200,
-
-    300, 300, 300, 300, 300, 300, 300, 600,
-    300, 300, 300, 600, 600, 400
+    150, 150, 300, 300, 300, 600,
+    150, 150, 300, 300, 300, 600,
+    150, 150, 300, 300, 300, 300, 600,
+    150, 150, 300, 300, 300, 600
 };
 
 #define TOTAL (sizeof(notes)/sizeof(notes[0]))
 #define TOTAL2 (sizeof(notes2)/sizeof(notes2[0]))
 
-void* musicPlay(void* arg) {
-    playing = true;
-    stop_signal = false;
-
-    for (int i = 0; i < TOTAL && !stop_signal; ++i) {
-        softToneWrite(SPKR, notes[i]);
-        delay(durations[i]);
+// ----------------------------------------
+// Queue functions
+// ----------------------------------------
+void enqueue_song(int song_id) {
+    pthread_mutex_lock(&queue_mutex);
+    int next = (queue_rear + 1) % MAX_QUEUE;
+    if (next != queue_front) {
+        song_queue[queue_rear].song_id = song_id;
+        queue_rear = next;
+        pthread_cond_signal(&queue_not_empty);
+    } else {
+        printf("Song queue full, ignoring request.\n");
     }
+    pthread_mutex_unlock(&queue_mutex);
+}
 
-    softToneWrite(SPKR, 0); // 노래 멈춤
-    playing = false;
+int dequeue_song() {
+    pthread_mutex_lock(&queue_mutex);
+    while (queue_front == queue_rear) {
+        pthread_cond_wait(&queue_not_empty, &queue_mutex);
+    }
+    int song_id = song_queue[queue_front].song_id;
+    queue_front = (queue_front + 1) % MAX_QUEUE;
+    pthread_mutex_unlock(&queue_mutex);
+    return song_id;
+}
+
+// ----------------------------------------
+// Song Playback Thread
+// ----------------------------------------
+void* song_queue_handler(void* arg) {
+    while (!stop_all) {
+        int song_id = dequeue_song();
+
+        playing = true;
+        stop_signal = false;
+
+        if (song_id == 1) {
+            for (int i = 0; i < TOTAL && !stop_signal; ++i) {
+                softToneWrite(SPKR, notes[i]);
+                delay(durations[i]);
+            }
+        } else if (song_id == 2) {
+            for (int i = 0; i < TOTAL2 && !stop_signal; ++i) {
+                softToneWrite(SPKR, notes2[i]);
+                delay(durations2[i]);
+            }
+        }
+
+        softToneWrite(SPKR, 0);
+        playing = false;
+    }
     return NULL;
 }
 
-void buzzer_on() {
-    if (!playing) {
-        pthread_create(&music_thread, NULL, musicPlay, NULL);
-    }
+// ----------------------------------------
+// Public API
+// ----------------------------------------
+void buzzer_on(int song_number) {
+    enqueue_song(song_number);
 }
 
 void buzzer_off() {
     if (playing) {
         stop_signal = true;
-        pthread_join(music_thread, NULL);  // 스레드 안전하게 종료 대기
-        softToneWrite(SPKR, 0);            // 강제 정지
-        playing = false;
+        softToneWrite(SPKR, 0);
     }
 }
 
@@ -102,5 +147,9 @@ __attribute__((constructor))
 void setup_buzzer() {
     wiringPiSetup();
     pinMode(SPKR, OUTPUT);
-    softToneCreate(SPKR);  // 소프트톤은 한 번만 생성
+    softToneCreate(SPKR);
+
+    pthread_t handler_thread;
+    pthread_create(&handler_thread, NULL, song_queue_handler, NULL);
+    pthread_detach(handler_thread);  // 백그라운드 실행
 }

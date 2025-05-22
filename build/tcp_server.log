@@ -1,5 +1,34 @@
-[2025-05-22 07:36:23] === TCP Server Starting ===
-[2025-05-22 07:36:23] This server is listening on port [5100]
-[2025-05-22 07:36:30] [INFO] Client connected from 192.168.0.41:[58046]
-[2025-05-22 07:36:32] [COMMAND] buzzer_on
-[2025-05-22 07:36:32] [RESPONSE] 🎵 Buzzer turned ON
+[2025-05-22 11:18:37] === TCP Server Starting ===
+[2025-05-22 11:18:37] This server is listening on port [5100]
+[2025-05-22 11:18:42] [INFO] Client connected from 192.168.0.41:[54656]
+[2025-05-22 11:18:44] [COMMAND] help
+[2025-05-22 11:18:44] [RESPONSE] Available commands:
+led_on          : Turn LED ON
+led_off         : Turn LED OFF
+led_brightness X: Set LED brightness level (0~2)
+buzzer_on       : Turn buzzer ON (will ask song number)
+buzzer_off      : Turn buzzer OFF
+read_light      : Read light sensor value and control LED
+countdown N     : Start 7-seg countdown from N
+quit / exit     : Disconnect client
+help            : Show this help message
+[2025-05-22 11:18:59] [COMMAND] help
+[2025-05-22 11:18:59] [RESPONSE] Available commands:
+led_on          : Turn LED ON
+led_off         : Turn LED OFF
+led_brightness X: Set LED brightness level (0~2)
+buzzer_on       : Turn buzzer ON (will ask song number)
+buzzer_off      : Turn buzzer OFF
+read_light      : Read light sensor value and control LED
+countdown N     : Start 7-seg countdown from N
+quit / exit     : Disconnect client
+help            : Show this help message
+[2025-05-22 11:19:09] [COMMAND] coundown 8
+[2025-05-22 11:19:09] [RESPONSE] ❌ Unknown command: coundown 8
+[2025-05-22 11:19:13] [COMMAND] countdown 8
+[2025-05-22 11:19:21] [INFO] Client connected from 192.168.0.38:[63047]
+[2025-05-22 11:19:23] [RESPONSE] 📟 7-segment countdown started from 8
+[2025-05-22 11:19:23] [COMMAND] countdown 5
+[2025-05-22 11:19:26] [COMMAND] countdown 4
+[2025-05-22 11:19:30] [RESPONSE] 📟 7-segment countdown started from 5
+[2025-05-22 11:19:36] [RESPONSE] 📟 7-segment countdown started from 4

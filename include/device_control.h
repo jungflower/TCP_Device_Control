@@ -13,7 +13,7 @@ void led_set_brightness(int level);  // 0=low, 1=mid, 2=high
 
 // BUZZER
 void* musicPlay(void* arg);
-void buzzer_on();
+void buzzer_on(int song_number);
 void buzzer_off();
 
 // LIGHT SENSOR

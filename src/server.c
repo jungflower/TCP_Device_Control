@@ -125,10 +125,29 @@ void* client_handler(void* arg) {
             }
         }
         else if (strcmp(buf, "buzzer_on") == 0) {
-            pthread_mutex_lock(&buzzer_mutex);
-            buzzer_on();
-            pthread_mutex_unlock(&buzzer_mutex);
-            snprintf(response, BUF_SIZE, "🎵 Buzzer turned ON\n");
+            // pthread_mutex_lock(&buzzer_mutex);
+            // buzzer_on();
+            // pthread_mutex_unlock(&buzzer_mutex);
+            // snprintf(response, BUF_SIZE, "🎵 Buzzer turned ON\n");
+                const char *song_prompt = "🎵 Which song do you want to play? (1 or 2): ";
+            write(csock, song_prompt, strlen(song_prompt));
+
+            char song_buf[BUF_SIZE] = {0};
+            int song_len = read(csock, song_buf, BUF_SIZE - 1);
+            if (song_len <= 0) {
+                snprintf(response, BUF_SIZE, "❌ No song selected. Cancelling buzzer_on.\n");
+            } else {
+                song_buf[song_len] = '\0';
+                int song_id = strtol(song_buf, NULL, 10);
+                if (song_id == 1 || song_id == 2) {
+                    pthread_mutex_lock(&buzzer_mutex);
+                    buzzer_on(song_id);  // 수정된 buzzer_on 함수
+                    pthread_mutex_unlock(&buzzer_mutex);
+                    snprintf(response, BUF_SIZE, "🎵 Buzzer turned ON with song %d\n", song_id);
+                } else {
+                    snprintf(response, BUF_SIZE, "❎ Invalid song number. Choose 1 or 2.\n");
+                }
+            }
         }
         else if (strcmp(buf, "buzzer_off") == 0) {
             pthread_mutex_lock(&buzzer_mutex);
@@ -160,6 +179,20 @@ void* client_handler(void* arg) {
             } else {
                 snprintf(response, BUF_SIZE, "❎ Please enter a positive integer for countdown\n");
             }
+        }
+        else if (strcmp(buf, "help") == 0) {
+            const char* help_msg =
+                "Available commands:\n"
+                "led_on          : Turn LED ON\n"
+                "led_off         : Turn LED OFF\n"
+                "led_brightness X: Set LED brightness level (0~2)\n"
+                "buzzer_on       : Turn buzzer ON (will ask song number)\n"
+                "buzzer_off      : Turn buzzer OFF\n"
+                "read_light      : Read light sensor value and control LED\n"
+                "countdown N     : Start 7-seg countdown from N\n"
+                "quit / exit     : Disconnect client\n"
+                "help            : Show this help message\n";
+            snprintf(response, BUF_SIZE, "%s", help_msg);
         }
         else {
             snprintf(response, BUF_SIZE, "❌ Unknown command: %.1000s\n", buf);
