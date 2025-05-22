@@ -1,0 +1,5 @@
+[2025-05-22 07:36:23] === TCP Server Starting ===
+[2025-05-22 07:36:23] This server is listening on port [5100]
+[2025-05-22 07:36:30] [INFO] Client connected from 192.168.0.41:[58046]
+[2025-05-22 07:36:32] [COMMAND] buzzer_on
+[2025-05-22 07:36:32] [RESPONSE] 🎵 Buzzer turned ON

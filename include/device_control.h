@@ -18,7 +18,7 @@ void buzzer_off();
 
 // LIGHT SENSOR
 int read_light_sensor();
-void auto_led_control_by_light();
+int auto_led_control_by_light();
 
 // SEGMENT
 void segment_display(int num);  // 0~9

@@ -7,28 +7,30 @@ int read_light_sensor() {
 }
 
 void gled_on() {
-    digitalWrite(LED_PIN, 100);  // full brightness
+    digitalWrite(LED_PIN, 0);  // full brightness
 }
 
 void gled_off() {
-    digitalWrite(LED_PIN, 0);
+    digitalWrite(LED_PIN, 100);
 }
 
-void auto_led_control_by_light() {
+int auto_led_control_by_light() {
     int light = read_light_sensor();
 
     if (light == 0) {
-        printf("Light Sensor value: %d → LED ON\n", light);
+        printf("Light off: %d → LED ON\n", light);
         gled_on();
     } else {
-        printf("Light Sensor value: %d → LED OFF\n", light);
+        printf("Light on: %d → LED OFF\n", light);
         gled_off();
     }
+
+    return light;
 }
 
 __attribute__((constructor))
 void setup_light_sensor() {
     wiringPiSetup();
     pinMode(LIGHT_SENSOR_PIN, INPUT);
-    pinMode(LED_PIN, OUTPUT);  // PWM 출력 모드 설정 꼭 필요
+    pinMode(LED_PIN, OUTPUT);  
 }
