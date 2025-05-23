@@ -1,0 +1,176 @@
+// server (daemon log)
+
+junghwalee@junghwalee:~/project $ ./install_tcpserver.sh
+🗂️ 로그 파일 생성 및 권한 설정: /home/junghwalee/project/build/tcp_server.log
+📝 서비스 파일 생성 중: /etc/systemd/system/tcp_server.service
+🔄 systemd 리로드 및 서비스 등록
+✅ 서비스 상태:
+● tcp_server.service - TCP Control Server Daemon
+     Loaded: loaded (/etc/systemd/system/tcp_server.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2025-05-23 08:19:53 BST; 40ms ago
+   Main PID: 4309 (server)
+      Tasks: 3 (limit: 8731)
+        CPU: 7ms
+     CGroup: /system.slice/tcp_server.service
+             └─4309 /home/junghwalee/project/build/server
+
+May 23 08:19:53 junghwalee systemd[1]: Started tcp_server.service - TCP Control Server Daemon.
+
+// server log (로그파일 추출)
+
+junghwalee@junghwalee:~/project/build $ cat tcp_server.log
+[2025-05-23 08:19:53] === TCP Server Starting ===
+[2025-05-23 08:19:53] This server is listening on port [5100]
+[2025-05-23 08:20:55] [INFO] Client connected from 192.168.0.38:[62867]
+[2025-05-23 08:21:00] [COMMAND] help
+[2025-05-23 08:21:00] [RESPONSE] Available commands:
+led_on          : Turn LED ON
+led_off         : Turn LED OFF
+led_brightness X: Set LED brightness level (0~2)
+buzzer_on       : Turn buzzer ON (will ask song number)
+buzzer_off      : Turn buzzer OFF
+read_light      : Read light sensor value and control LED
+countdown N     : Start 7-seg countdown from N
+quit / exit     : Disconnect client
+help            : Show this help message
+[2025-05-23 08:21:04] [COMMAND] led_on
+[2025-05-23 08:21:04] [RESPONSE] 🟢 LED turned ON
+[2025-05-23 08:21:06] [COMMAND] led_off
+[2025-05-23 08:21:06] [RESPONSE] 🔴 LED turned OFF
+[2025-05-23 08:21:11] [COMMAND] led_birghtness 0
+[2025-05-23 08:21:11] [RESPONSE] ❌ Unknown command: led_birghtness 0
+[2025-05-23 08:21:17] [COMMAND] led_brightness 0
+[2025-05-23 08:21:17] [RESPONSE] 💡 LED brightness set to 0
+[2025-05-23 08:21:20] [COMMAND] led_brightness 1
+[2025-05-23 08:21:20] [RESPONSE] 💡 LED brightness set to 1
+[2025-05-23 08:21:23] [COMMAND] led_brightness 2
+[2025-05-23 08:21:23] [RESPONSE] 💡 LED brightness set to 2
+[2025-05-23 08:21:31] [COMMAND] buzzer_on
+[2025-05-23 08:21:33] [RESPONSE] 🎵 Buzzer turned ON with song 1
+[2025-05-23 08:21:37] [COMMAND] buzzer_on
+[2025-05-23 08:21:38] [RESPONSE] 🎵 Buzzer turned ON with song 2
+[2025-05-23 08:21:44] [COMMAND] buzzer_off
+[2025-05-23 08:21:44] [RESPONSE] 🎵 Buzzer turned OFF
+[2025-05-23 08:22:12] [INFO] Client connected from 192.168.0.41:[53200]
+[2025-05-23 08:22:33] [COMMAND] help
+[2025-05-23 08:22:33] [RESPONSE] Available commands:
+led_on          : Turn LED ON
+led_off         : Turn LED OFF
+led_brightness X: Set LED brightness level (0~2)
+buzzer_on       : Turn buzzer ON (will ask song number)
+buzzer_off      : Turn buzzer OFF
+read_light      : Read light sensor value and control LED
+countdown N     : Start 7-seg countdown from N
+quit / exit     : Disconnect client
+help            : Show this help message
+[2025-05-23 08:22:36] [COMMAND] countdown 9
+[2025-05-23 08:22:40] [COMMAND] countdown 5
+[2025-05-23 08:22:47] [RESPONSE] 📟 7-segment countdown started from 9
+[2025-05-23 08:22:51] [COMMAND] buzzer_on
+[2025-05-23 08:22:54] [RESPONSE] 📟 7-segment countdown started from 5
+[2025-05-23 08:22:54] [RESPONSE] 🎵 Buzzer turned ON with song 1
+[2025-05-23 08:22:59] [COMMAND] buzzer_on
+[2025-05-23 08:23:00] [RESPONSE] 🎵 Buzzer turned ON with song 2
+[2025-05-23 08:23:08] [COMMAND] buzzer_off
+[2025-05-23 08:23:08] [RESPONSE] 🎵 Buzzer turned OFF
+[2025-05-23 08:23:24] [COMMAND] read_light
+[2025-05-23 08:23:24] [RESPONSE] 🌞 light_sensor value: 0 -> LED ON
+[2025-05-23 08:23:29] [COMMAND] read_light
+[2025-05-23 08:23:29] [RESPONSE] 🌚 light_sensor value: 1 -> LED ON
+[2025-05-23 08:23:35] [COMMAND] quit
+[2025-05-23 08:23:35] [RESPONSE] ❌ Unknown command: quit
+
+
+// client1
+junghwalee@girl ~/project (main) $ ./build/clien
+Connected to server. Enter commands. Type 'quit'
+> help
+Server response: Available commands:
+led_on          : Turn LED ON
+led_off         : Turn LED OFF
+led_brightness X: Set LED brightness level (0~2)
+buzzer_on       : Turn buzzer ON (will ask song
+buzzer_off      : Turn buzzer OFF
+read_light      : Read light sensor value and co
+countdown N     : Start 7-seg countdown from N
+quit / exit     : Disconnect client
+help            : Show this help message
+
+> led_on
+Server response: 🟢 LED turned ON
+
+> led_off
+Server response: 🔴 LED turned OFF
+
+> led_birghtness 0
+Server response: ❌ Unknown command: led_birghtn
+
+> led_brightness 0
+Server response: 💡 LED brightness set to 0
+
+> led_brightness 1
+Server response: 💡 LED brightness set to 1
+
+> led_brightness 2
+Server response: 💡 LED brightness set to 2
+
+> buzzer_on
+Server response: 🎵 Which song do you want to pl
+> 1
+Server response: 🎵 Buzzer turned ON with song 1
+
+> buzzer_on
+Server response: 🎵 Which song do you want to pl
+> 2
+Server response: 🎵 Buzzer turned ON with song 2
+
+> buzzer_off
+Server response: 🎵 Buzzer turned OFF
+
+> countdown 5
+Server response: 📟 7-segment countdown started from 5
+
+> buzzer_on
+Server response: 🎵 Which song do you want to play? (1 or 2):
+> 2
+Server response: 🎵 Buzzer turned ON with song 2
+
+> read_light
+Server response: 🌞 light_sensor value: 0 -> LED ON
+
+> read_light
+Server response: 🌚 light_sensor value: 1 -> LED ON
+
+> ^C
+SIGINT received, sent quit command to server, exiting client.
+
+// client2
+junghwalee@junghwalee:~/project $ ./build/client 1
+Connected to server. Enter commands. Type 'quit' o
+> help
+Server response: Available commands:
+led_on          : Turn LED ON
+led_off         : Turn LED OFF
+led_brightness X: Set LED brightness level (0~2)
+buzzer_on       : Turn buzzer ON (will ask song number)
+buzzer_off      : Turn buzzer OFF
+read_light      : Read light sensor value and control LED
+countdown N     : Start 7-seg countdown from N
+quit / exit     : Disconnect client
+help            : Show this help message
+
+> countdown 9
+Server response: 📟 7-segment countdown started from 9
+
+> buzzer_on
+Server response: 🎵 Which song do you want to play? (1 or 2):
+> 1
+
+Server response: 🎵 Buzzer turned ON with song 1
+
+> > buzzer_off
+Server response: 🎵 Buzzer turned OFF
+
+> quit
+Exiting.
+
