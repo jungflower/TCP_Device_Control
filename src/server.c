@@ -125,11 +125,7 @@ void* client_handler(void* arg) {
             }
         }
         else if (strcmp(buf, "buzzer_on") == 0) {
-            // pthread_mutex_lock(&buzzer_mutex);
-            // buzzer_on();
-            // pthread_mutex_unlock(&buzzer_mutex);
-            // snprintf(response, BUF_SIZE, "🎵 Buzzer turned ON\n");
-                const char *song_prompt = "🎵 Which song do you want to play? (1 or 2): ";
+            const char *song_prompt = "🎵 Which song do you want to play? (1 or 2): ";
             write(csock, song_prompt, strlen(song_prompt));
 
             char song_buf[BUF_SIZE] = {0};
