@@ -1,8 +1,8 @@
-[2025-05-22 11:18:37] === TCP Server Starting ===
-[2025-05-22 11:18:37] This server is listening on port [5100]
-[2025-05-22 11:18:42] [INFO] Client connected from 192.168.0.41:[54656]
-[2025-05-22 11:18:44] [COMMAND] help
-[2025-05-22 11:18:44] [RESPONSE] Available commands:
+[2025-05-23 02:04:50] === TCP Server Starting ===
+[2025-05-23 02:04:50] This server is listening on port [5100]
+[2025-05-23 02:04:59] [INFO] Client connected from 192.168.0.41:[35582]
+[2025-05-23 02:05:02] [COMMAND] help
+[2025-05-23 02:05:02] [RESPONSE] Available commands:
 led_on          : Turn LED ON
 led_off         : Turn LED OFF
 led_brightness X: Set LED brightness level (0~2)
@@ -12,8 +12,13 @@ read_light      : Read light sensor value and control LED
 countdown N     : Start 7-seg countdown from N
 quit / exit     : Disconnect client
 help            : Show this help message
-[2025-05-22 11:18:59] [COMMAND] help
-[2025-05-22 11:18:59] [RESPONSE] Available commands:
+[2025-05-23 02:05:08] [COMMAND] buzzer_on
+[2025-05-23 02:05:09] [RESPONSE] 🎵 Buzzer turned ON with song 1
+[2025-05-23 02:05:11] [COMMAND] buzzer_off
+[2025-05-23 02:05:11] [RESPONSE] 🎵 Buzzer turned OFF
+[2025-05-23 02:28:21] [INFO] Client connected from 192.168.0.38:[57512]
+[2025-05-23 02:28:25] [COMMAND] help
+[2025-05-23 02:28:25] [RESPONSE] Available commands:
 led_on          : Turn LED ON
 led_off         : Turn LED OFF
 led_brightness X: Set LED brightness level (0~2)
@@ -23,12 +28,25 @@ read_light      : Read light sensor value and control LED
 countdown N     : Start 7-seg countdown from N
 quit / exit     : Disconnect client
 help            : Show this help message
-[2025-05-22 11:19:09] [COMMAND] coundown 8
-[2025-05-22 11:19:09] [RESPONSE] ❌ Unknown command: coundown 8
-[2025-05-22 11:19:13] [COMMAND] countdown 8
-[2025-05-22 11:19:21] [INFO] Client connected from 192.168.0.38:[63047]
-[2025-05-22 11:19:23] [RESPONSE] 📟 7-segment countdown started from 8
-[2025-05-22 11:19:23] [COMMAND] countdown 5
-[2025-05-22 11:19:26] [COMMAND] countdown 4
-[2025-05-22 11:19:30] [RESPONSE] 📟 7-segment countdown started from 5
-[2025-05-22 11:19:36] [RESPONSE] 📟 7-segment countdown started from 4
+[2025-05-23 02:28:27] [COMMAND] led_on
+[2025-05-23 02:28:27] [RESPONSE] 🟢 LED turned ON
+[2025-05-23 02:28:29] [COMMAND] led_off
+[2025-05-23 02:28:29] [RESPONSE] 🔴 LED turned OFF
+[2025-05-23 02:28:36] [COMMAND] led_brightness 0
+[2025-05-23 02:28:36] [RESPONSE] 💡 LED brightness set to 0
+[2025-05-23 02:28:39] [COMMAND] led_birghtness 1
+[2025-05-23 02:28:39] [RESPONSE] ❌ Unknown command: led_birghtness 1
+[2025-05-23 02:28:44] [COMMAND] led_brightness 1
+[2025-05-23 02:28:44] [RESPONSE] 💡 LED brightness set to 1
+[2025-05-23 02:28:47] [COMMAND] led_brightness 2
+[2025-05-23 02:28:47] [RESPONSE] 💡 LED brightness set to 2
+[2025-05-23 02:28:53] [COMMAND] led_brightness 0
+[2025-05-23 02:28:53] [RESPONSE] 💡 LED brightness set to 0
+[2025-05-23 02:28:56] [COMMAND] led_brightness 1
+[2025-05-23 02:28:56] [RESPONSE] 💡 LED brightness set to 1
+[2025-05-23 02:28:59] [COMMAND] led_brightness 2
+[2025-05-23 02:28:59] [RESPONSE] 💡 LED brightness set to 2
+[2025-05-23 02:29:01] [COMMAND] led_brightness 1
+[2025-05-23 02:29:01] [RESPONSE] 💡 LED brightness set to 1
+[2025-05-23 02:29:04] [COMMAND] led_brightness 0
+[2025-05-23 02:29:04] [RESPONSE] 💡 LED brightness set to 0
